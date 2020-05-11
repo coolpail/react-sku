@@ -14,7 +14,8 @@
 
 ## 写完的感受和收获
 
-1. 用 react 写当业务逻辑写完后，还不算完事还需要优化一下是否有重复渲染
+1. react 想较于 vue，在写完业务逻辑后更需要考虑是否有不必要的`re-render`
+2. 正则匹配在循环中不能加 g 修饰符
 
 ## 怎么写呢
 
@@ -88,7 +89,8 @@ export default function getPriceAndCount(str: string, arr: skuType, keyNum: numb
 }
 
 //hook.ts
-const [disableList, setDisableList] = useState<number[][]>([]);
+//维护一份缓存的结果结合
+const [cashResult, setCashResult] = useState<cashResult<number>>({} as any);
 useEffect(() => {
     if (skuList.length) {
         let res: resultItem<number> = {} as any;
@@ -96,9 +98,6 @@ useEffect(() => {
             res = cashResult[skuStr];
         } else {
             res = getPriceAndCount(skuStr, sku, key.length);
-            if (res.skuStr) {
-                setOnlySkuList(res.skuStr);
-            }
             cashResult[skuStr] = res;
             setCashResult({ ...cashResult });
         }
